@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  traefik:
+    image: traefik:latest
+    ports:
+      - "8085:80"
+      - "8086:8080"
+    volumes:
+
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik-example.yml:/etc/traefik/traefik.yml
+      - ./plugins-local:/plugins-local
+
+  whoami:
+    image: traefik/whoami
+    labels:
+      - "traefik.http.routers.whoami.rule=Host(`whoami.docker.localhost`)"
+      - traefik.http.middlewares.authz.plugin.traefik-authz.modelPath=/plugins-local/src/github.com/casbin/traefik-authz/examples/rbac_with_pattern_model.conf
+      - traefik.http.middlewares.authz.plugin.traefik-authz.policyPath=/plugins-local/src/github.com/casbin/traefik-authz/examples/rbac_with_pattern_policy.conf
+      - traefik.http.routers.whoami.middlewares=authz@docker

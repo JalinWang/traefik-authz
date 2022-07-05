@@ -1,0 +1,8 @@
+displayName: Casbin Authz
+summary: Authorization using Casbin
+type: middleware
+import: github.com/casbin/traefik-authz
+compatibility: TODO
+testData:
+  ModelPath: "./examples/rbac_with_pattern_model.conf"
+  PolicyPath: "./examples/rbac_with_pattern_policy.csv"
